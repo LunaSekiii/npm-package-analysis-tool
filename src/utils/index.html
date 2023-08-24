@@ -47,7 +47,7 @@
 </html>
 <script>
    const data = <!-- REPLACE_WITH_JSON_DATA -->;
-   const copy = data;
+   const copy = {...data};
      function replaceDependenciesWithChildren(obj,str) {
        for (let key in obj) {
          if (typeof obj[key] === "object") {
@@ -63,6 +63,8 @@
    replaceDependenciesWithChildren(copy,'devDependencies');
    const container = document.getElementById("mountNode");
    const container2 = document.getElementById('mountNode2');
+   console.log(data);
+   console.log(copy);
    function draw(data,childrenkey,container,box){
     const width = container.scrollWidth;
    const height = container.scrollHeight;
@@ -96,7 +98,7 @@
      },
      layout: {
        type: "mindmap",
-       children: "dependencies",
+       children: childrenkey,
        direction: "H",
        getHeight: () => {
          return 16;

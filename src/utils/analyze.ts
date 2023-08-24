@@ -48,7 +48,7 @@ export default function analyze(options: AnalyzeOptions) {
   // 是否输出json文件
   let json = options.json || false;
   !json
-    ? console.log(getDependencies(depth))
+    ? console.log(getDependencies(3))
     : console.log(JSON.stringify(getDependencies(depth)));
   serverstart(JSON.stringify(getDependencies(depth)));
 }
