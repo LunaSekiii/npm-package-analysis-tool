@@ -4,6 +4,10 @@ import resolve from "resolve";
 import http from "http";
 // 当前工作目录
 const basedir = process.cwd();
+// 默认递归分析的层次深度
+const defaultAnalyzeDepth = 2;
+// 默认Json输出文件路径
+const defaultJsonFilePath = path.resolve(basedir, "./analyze/package.json");
 
 /** analyze命令参数 */
 interface AnalyzeOptions {
