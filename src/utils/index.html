@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Analysis Result</title>
+    <script src="https://gw.alipayobjects.com/os/lib/antv/g6/4.3.11/dist/g6.min.js"></script>
+  </head>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* 可以防止滚动条出现 */
+    }
+    #mountNode {
+      height: 100%;
+      width: 50%;
+      background-color: rgb(158, 220, 255);
+    }
+    #mountNode2 {
+      height: 100%;
+      width: 50%;
+      background-color: white;
+    }
+    #root {
+      width: 100%;
+      height: 100%;
+      display: flex;
+    }
+    .mountNodeh1 {
+      text-align: center;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+  <body>
+    <div id="root">
+      <div id="mountNode">
+        <h1 class="mountNodeh1">dependencies生产依赖包关系图</h1>
+      </div>
+      <div id="mountNode2">
+        <h1 class="mountNodeh1">devDependencies开发依赖包</h1>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+   const data = <!-- REPLACE_WITH_JSON_DATA -->;
+   const copy = data;
+     function replaceDependenciesWithChildren(obj,str) {
+       for (let key in obj) {
+         if (typeof obj[key] === "object") {
+           replaceDependenciesWithChildren(obj[key]);
+           if (key === str) {
+             obj["children"] = obj[key];
+             delete obj[key];
+           }
+         }
+       }
+     };
+   replaceDependenciesWithChildren(data,'dependencies');
+   replaceDependenciesWithChildren(copy,'devDependencies');
+   const container = document.getElementById("mountNode");
+   const container2 = document.getElementById('mountNode2');
+   function draw(data,childrenkey,container,box){
+    const width = container.scrollWidth;
+   const height = container.scrollHeight;
+     const graph = new G6.TreeGraph({
+     container: box,
+     width,
+     height,
+     modes: {
+       default: [
+         {
+           type: "collapse-expand",
+           onChange: function onChange(item, collapsed) {
+             const data = item.get("model");
+             data.collapsed = collapsed;
+             return true;
+           },
+         },
+         "drag-canvas",
+         "zoom-canvas",
+       ],
+     },
+     defaultNode: {
+       size: 26,
+       anchorPoints: [
+         [0, 0.5],
+         [1, 0.5],
+       ],
+     },
+     defaultEdge: {
+       type: "cubic-horizontal",
+     },
+     layout: {
+       type: "mindmap",
+       children: "dependencies",
+       direction: "H",
+       getHeight: () => {
+         return 16;
+       },
+       getWidth: () => {
+         return 16;
+       },
+       getVGap: () => {
+         return 10;
+       },
+       getHGap: () => {
+         return 50;
+       },
+     },
+   });
+   let centerX = 0;
+   graph.node(function (node) {
+     if (node.name === "Modeling Methods") {
+       centerX = node.x;
+     }
+
+     return {
+       label: node.name,
+       labelCfg: {
+         position:
+           node[childrenkey] && node[childrenkey].length > 0
+             ? "left"
+             : node.x > centerX
+             ? "right"
+             : "left",
+         offset: 5,
+       },
+     };
+   });
+   graph.data(data);
+   graph.render();
+   graph.fitView();
+   if (typeof window !== "undefined")
+     window.onresize = () => {
+       if (!graph || graph.get("destroyed")) return;
+       if (!container || !container.scrollWidth || !container.scrollHeight)
+         return;
+       graph.changeSize(container.scrollWidth, container.scrollHeight);
+   };
+   }
+  draw(data,'dependencies',container,'mountNode')
+  draw(copy,'devDependencies',container2,'mountNode2');
+</script>
