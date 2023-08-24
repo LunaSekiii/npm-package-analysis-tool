@@ -4,6 +4,10 @@ import resolve from "resolve";
 
 // 当前工作目录
 const basedir = process.cwd();
+// 默认递归分析的层次深度
+const defaultAnalyzeDepth = 2;
+// 默认Json输出文件路径
+const defaultJsonFilePath = path.resolve(basedir, "./analyze/package.json");
 
 /** analyze命令参数 */
 interface AnalyzeOptions {
@@ -15,11 +19,38 @@ interface AnalyzeOptions {
  * @param options
  */
 export default function analyze(options: AnalyzeOptions) {
-	// 递归分析的层次深度
-	let depth = Number(options.depth) || 2;
-	// 是否输出json文件
+	/** 递归分析的层次深度 */
+	let depth = Number(options.depth) || defaultAnalyzeDepth;
+	/** 输出json文件路径 */
 	let json = options.json || false;
-	console.log(getDependencies(depth));
+	// TODO: 参数合法性检测
+	if (json === true) json = defaultJsonFilePath;
+	console.log(options);
+	console.log(
+		`分析npm包依赖关系，深度为${depth},${
+			json ? "输出到" + json : "不输出Json"
+		}}`
+	);
+	const projectDependencies = getDependencies(depth);
+	if (json) {
+		const str = JSON.stringify(projectDependencies, null, "\t");
+		writeJsonFile(json, str);
+	} else {
+		console.log(projectDependencies);
+	}
+}
+
+/**
+ * 写入Json文件
+ */
+function writeJsonFile(filePath: string, data: string) {
+	// 创建目录
+	fs.mkdir(path.dirname(filePath), { recursive: true }, (err) => {
+		console.error(err);
+	});
+	fs.writeFile(filePath, data, (err) => {
+		console.error(err);
+	});
 }
 
 /** package.json信息 */
