@@ -1,0 +1,38 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* 可以防止滚动条出现 */
+}
+#mountNode {
+  height: 100%;
+  width: 50%;
+  background-color: rgb(158, 220, 255);
+}
+#mountNode2 {
+  height: 100%;
+  width: 50%;
+  background-color: white;
+}
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+.mountNodeh1 {
+  text-align: center;
+  width: 100%;
+  height: auto;
+}
+.tooltip {
+  position: absolute;
+  background-color: #000000b3;
+  color: white;
+  padding: 4px 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 999;
+}

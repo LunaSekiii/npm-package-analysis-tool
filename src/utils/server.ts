@@ -6,62 +6,65 @@ import path from "path";
 const defaultServerPort = 5000;
 
 async function startServer(str: string, port: number) {
-	return new Promise<void>((resolve, reject) => {
-		const server = http.createServer((req, res) => {
-			const filePath = path.join(__dirname, "../index.html");
-			fs.readFile(filePath, "utf-8", (err, data) => {
-				if (err) {
-					console.log(err);
-					res.writeHead(500, {
-						"Content-Type": "text/html;charset=utf-8",
-					});
-					res.end("服务错误");
-					return;
-				}
-				// 在HTML中插入分析结果的JSON字符串
-				const modifiedHtml = data.replace(
-					"<!-- REPLACE_WITH_JSON_DATA -->",
-					`${str}`
-				);
+  return new Promise<void>((resolve, reject) => {
+    const server = http.createServer((req, res) => {
+      let filePath = path.join(__dirname, "../index.html");
 
-				res.writeHead(200, {
-					"Content-Type": "text/html;charset=utf-8",
-				});
-				res.end(modifiedHtml);
-			});
-		});
+      if (req.url === "/CSS/style.css") {
+        filePath = path.join(__dirname, "../CSS/style.css");
+        res.setHeader("Content-Type", "text/css;charset=utf-8");
+      } else {
+        res.setHeader("Content-Type", "text/html;charset=utf-8");
+      }
 
-		server.on("error", (error: any) => {
-			// 端口冲突，尝试下一个端口
-			reject(error);
-		});
+      fs.readFile(filePath, "utf-8", (err, data) => {
+        if (err) {
+          console.log(err);
+          res.writeHead(500);
+          res.end("服务错误");
+          return;
+        }
 
-		server.on("listening", () => {
-			console.log(
-				"\x1b[32m%s\x1b[0m",
-				`运行在 at http://localhost:${port}`
-			);
-			resolve();
-		});
+        if (req.url === "/CSS/style.css") {
+          res.writeHead(200);
+          res.end(data);
+        } else {
+          const modifiedHtml = data.replace(
+            "<!-- REPLACE_WITH_JSON_DATA -->",
+            `${str}`
+          );
+          res.writeHead(200);
+          res.end(modifiedHtml);
+        }
+      });
+    });
 
-		server.listen(port);
-	});
+    server.on("error", (error: any) => {
+      reject(error);
+    });
+
+    server.on("listening", () => {
+      console.log("\x1b[32m%s\x1b[0m", `运行在 http://localhost:${port}`);
+      resolve();
+    });
+
+    server.listen(port);
+  });
 }
-
 // 启动服务
 export default async function server(str: string) {
-	let port = defaultServerPort;
-	while (true) {
-		try {
-			await startServer(str, port);
-			break;
-		} catch (error) {
-			// 端口冲突，尝试下一个端口
-			console.log(
-				"\x1b[33m%s\x1b[0m",
-				`Port ${port} is unavailable. Try port ${port + 1}.\n`
-			);
-			port++;
-		}
-	}
+  let port = defaultServerPort;
+  while (true) {
+    try {
+      await startServer(str, port);
+      break;
+    } catch (error) {
+      // 端口冲突，尝试下一个端口
+      console.log(
+        "\x1b[33m%s\x1b[0m",
+        `Port ${port} is unavailable. Try port ${port + 1}.\n`
+      );
+      port++;
+    }
+  }
 }
