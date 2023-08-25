@@ -2,38 +2,9 @@
 <html>
   <head>
     <title>Analysis Result</title>
+    <link rel="stylesheet" href="./CSS/style.css" />
     <script src="https://gw.alipayobjects.com/os/lib/antv/g6/4.3.11/dist/g6.min.js"></script>
   </head>
-  <style>
-    body,
-    html {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden; /* 可以防止滚动条出现 */
-    }
-    #mountNode {
-      height: 100%;
-      width: 50%;
-      background-color: rgb(158, 220, 255);
-    }
-    #mountNode2 {
-      height: 100%;
-      width: 50%;
-      background-color: white;
-    }
-    #root {
-      width: 100%;
-      height: 100%;
-      display: flex;
-    }
-    .mountNodeh1 {
-      text-align: center;
-      width: 100%;
-      height: auto;
-    }
-  </style>
   <body>
     <div id="root">
       <div id="mountNode">
@@ -42,13 +13,114 @@
       <div id="mountNode2">
         <h1 class="mountNodeh1">devDependencies开发依赖包</h1>
       </div>
+      <div class="tooltip" id="tooltip"></div>
     </div>
   </body>
 </html>
 <script>
-     const data = <!-- REPLACE_WITH_JSON_DATA -->;
-     const copy = {...data};
-     function replaceDependenciesWithChildren(obj, str) {
+    function hideTooltip() {
+    const tooltip = document.getElementById("tooltip");
+    tooltip.style.display = "none";
+  }
+  function showTooltip(e, text) {
+    const tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = `
+      <h3>包名:${text.name}</h3>
+      <h3>版本:${text.version}</h3>`;
+    tooltip.style.left = e.clientX + "px";
+    tooltip.style.top = e.clientY + "px";
+    tooltip.style.display = "block";
+  }
+  function draw(data, childrenkey, container, box) {
+    const width = container.scrollWidth;
+    const height = container.scrollHeight;
+    const graph = new G6.TreeGraph({
+      container: box,
+      width,
+      height,
+      modes: {
+        default: [
+          {
+            type: "collapse-expand",
+            onChange: function onChange(item, collapsed) {
+              const data = item.get("model");
+              data.collapsed = collapsed;
+              return true;
+            },
+          },
+          "drag-canvas",
+          "zoom-canvas",
+        ],
+      },
+      defaultNode: {
+        size: 26,
+        anchorPoints: [
+          [0, 0.5],
+          [1, 0.5],
+        ],
+      },
+      defaultEdge: {
+        type: "cubic-horizontal",
+      },
+      layout: {
+        type: "mindmap",
+        children: childrenkey,
+        direction: "H",
+        getHeight: () => {
+          return 16;
+        },
+        getWidth: () => {
+          return 16;
+        },
+        getVGap: () => {
+          return 10;
+        },
+        getHGap: () => {
+          return 50;
+        },
+      },
+    });
+    let centerX = 0;
+    graph.node(function (node) {
+      if (node.name === "Modeling Methods") {
+        centerX = node.x;
+      }
+      return {
+        label: node.name,
+        labelCfg: {
+          position:
+            node[childrenkey] && node[childrenkey].length > 0
+              ? "left"
+              : node.x > centerX
+              ? "right"
+              : "left",
+          offset: 5,
+        },
+        tooltip: { ...node },
+      };
+    });
+    graph.on("node:mouseenter", (e) => {
+      const node = e.item;
+      const model = node.getModel();
+      const text = model;
+      showTooltip(e, text);
+    });
+    // 给每个节点添加鼠标移出事件
+    graph.on("node:mouseleave", () => {
+      hideTooltip();
+    });
+    graph.data(data);
+    graph.render();
+    graph.fitView();
+    if (typeof window !== "undefined")
+      window.onresize = () => {
+        if (!graph || graph.get("destroyed")) return;
+        if (!container || !container.scrollWidth || !container.scrollHeight)
+          return;
+        graph.changeSize(container.scrollWidth, container.scrollHeight);
+      };
+  }
+  function replaceDependenciesWithChildren(obj, str) {
     for (let key in obj) {
       if (typeof obj[key] === "object") {
         replaceDependenciesWithChildren(obj[key], str); // 递归处理嵌套属性
@@ -58,92 +130,13 @@
         }
       }
     }
-  };
-     replaceDependenciesWithChildren(data,'dependencies');
-     replaceDependenciesWithChildren(copy,'devDependencies');
-     const container = document.getElementById("mountNode");
-     const container2 = document.getElementById('mountNode2');
-     console.log(data);
-     console.log(copy);
-     function draw(data,childrenkey,container,box){
-      const width = container.scrollWidth;
-     const height = container.scrollHeight;
-       const graph = new G6.TreeGraph({
-       container: box,
-       width,
-       height,
-       modes: {
-         default: [
-           {
-             type: "collapse-expand",
-             onChange: function onChange(item, collapsed) {
-               const data = item.get("model");
-               data.collapsed = collapsed;
-               return true;
-             },
-           },
-           "drag-canvas",
-           "zoom-canvas",
-         ],
-       },
-       defaultNode: {
-         size: 26,
-         anchorPoints: [
-           [0, 0.5],
-           [1, 0.5],
-         ],
-       },
-       defaultEdge: {
-         type: "cubic-horizontal",
-       },
-       layout: {
-         type: "mindmap",
-         children: childrenkey,
-         direction: "H",
-         getHeight: () => {
-           return 16;
-         },
-         getWidth: () => {
-           return 16;
-         },
-         getVGap: () => {
-           return 10;
-         },
-         getHGap: () => {
-           return 50;
-         },
-       },
-     });
-     let centerX = 0;
-     graph.node(function (node) {
-       if (node.name === "Modeling Methods") {
-         centerX = node.x;
-       }
-
-       return {
-         label: node.name,
-         labelCfg: {
-           position:
-             node[childrenkey] && node[childrenkey].length > 0
-               ? "left"
-               : node.x > centerX
-               ? "right"
-               : "left",
-           offset: 5,
-         },
-       };
-     });
-     graph.data(data);
-     graph.render();
-     graph.fitView();
-     if (typeof window !== "undefined")
-       window.onresize = () => {
-         if (!graph || graph.get("destroyed")) return;
-         if (!container || !container.scrollWidth || !container.scrollHeight)
-           return;
-         graph.changeSize(container.scrollWidth, container.scrollHeight);
-     };
-     }
-    draw(data,'dependencies',container,'mountNode')
-    draw(copy,'devDependencies',container2,'mountNode2');
+  }
+  const data = <!-- REPLACE_WITH_JSON_DATA -->;
+  const copy = {...data};
+  replaceDependenciesWithChildren(data,'dependencies');
+  replaceDependenciesWithChildren(copy,'devDependencies');
+  const container = document.getElementById("mountNode");
+  const container2 = document.getElementById('mountNode2');
+   draw(data,'dependencies',container,'mountNode')
+   draw(copy,'devDependencies',container2,'mountNode2');
 </script>
