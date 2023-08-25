@@ -30,7 +30,7 @@ export default function analyze(options: AnalyzeOptions) {
 			json ? "输出到" + json : "不输出Json"
 		}\n-------------------------\n`
 	);
-	const projectDependencies = getDependencies(depth);
+	const projectDependencies = getRootDependencies(depth);
 	const str = JSON.stringify(projectDependencies, null, "\t");
 	if (json) {
 		writeJsonFile(json, str);
@@ -52,32 +52,28 @@ interface PackageJson {
 
 /**
  * 读取package.json文件
- * @param packageName 包名（可选）
+ * @param packageName 包名
  * @returns
  */
-function readPackageJson(packageName?: string) {
+function readPackageJson(packageName: string) {
 	/** package.json对象 */
 	let packageJson: PackageJson = {};
 	// 获取指定包的package.json
-	if (packageName)
-		try {
-			resolve.sync(packageName, {
-				basedir,
-				extensions: [".d.ts", ".ts", ".js", ".json"],
-				moduleDirectory: ["node_modules", "@types"],
-				packageFilter: (pkg, pkgPath) => {
-					packageJson = pkg;
-					return { ...pkg, _resolvedPath: pkgPath };
-				},
-			});
-		} catch (e) {
-			// TODO: 错误处理提示
-			// console.error(new Error(`找不到包 ${packageName} `));
-		}
-	// 获取当前工作目录的package.json
-	else {
-		packageJson = JSON.parse(fs.readFileSync("./package.json", "utf-8"));
+	try {
+		resolve.sync(packageName, {
+			basedir,
+			extensions: [".d.ts", ".ts", ".js", ".json"],
+			moduleDirectory: ["node_modules", "@types"],
+			packageFilter: (pkg, pkgPath) => {
+				packageJson = pkg;
+				return { ...pkg, _resolvedPath: pkgPath };
+			},
+		});
+	} catch (e) {
+		// TODO: 错误处理提示
+		// console.error(new Error(`找不到包 ${packageName} `));
 	}
+	// 获取当前工作目录的package.json
 	const { version, dependencies, devDependencies } = packageJson;
 	return { name: packageName, version, dependencies, devDependencies };
 }
@@ -96,23 +92,63 @@ interface PackageInfo {
 /**
  * 递归遍历包获取依赖
  */
-export function getDependencies(residualDepth: number, packageName?: string) {
+function getDependencies(
+	residualDepth: number,
+	packageName: string,
+	version: string
+) {
 	const packageJson = readPackageJson(packageName);
 	let packageInfo: PackageInfo = {
 		name: packageName || "root",
-		version: packageJson.version,
+		version: version,
 		dependencies: [],
 		devDependencies: [],
 	};
 	if (residualDepth <= 0) return packageInfo;
 	for (let packageName in packageJson.dependencies) {
 		packageInfo.dependencies?.push(
-			getDependencies(residualDepth - 1, packageName)
+			getDependencies(
+				residualDepth - 1,
+				packageName,
+				packageJson.dependencies[packageName]
+			)
 		);
 	}
 	for (let packageName in packageJson.devDependencies) {
 		packageInfo.devDependencies?.push(
-			getDependencies(residualDepth - 1, packageName)
+			getDependencies(
+				residualDepth - 1,
+				packageName,
+				packageJson.devDependencies[packageName]
+			)
+		);
+	}
+	return packageInfo;
+}
+
+/**
+ * 获取根项目的依赖
+ */
+function getRootDependencies(depth: number) {
+	const { name, version, dependencies, devDependencies } = JSON.parse(
+		fs.readFileSync("./package.json", "utf-8")
+	);
+	let packageInfo: PackageInfo = {
+		name: name || "root",
+		version: version,
+		dependencies: [],
+		devDependencies: [],
+	};
+	// 获取项目依赖
+	for (let key in dependencies) {
+		packageInfo.dependencies?.push(
+			getDependencies(depth - 1, key, dependencies[key])
+		);
+	}
+	// 获取项目开发依赖
+	for (let key in devDependencies) {
+		packageInfo.devDependencies?.push(
+			getDependencies(depth - 1, key, devDependencies[key])
 		);
 	}
 	return packageInfo;
