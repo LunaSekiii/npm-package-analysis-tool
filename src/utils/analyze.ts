@@ -32,7 +32,6 @@ export default function analyze(options: AnalyzeOptions) {
   );
   const projectDependencies = getDependencies(depth);
   const str = JSON.stringify(projectDependencies, null, "\t");
-  console.log(str);
   if (json) {
     writeJsonFile(json, str);
   } else {
