@@ -23,7 +23,6 @@
       const tooltip = document.getElementById("tooltip");
       tooltip.style.display = "none";
     };
-  console.log(data);
   function showTooltip(e, text) {
     const tooltip = document.getElementById("tooltip");
     tooltip.innerHTML = `
@@ -141,11 +140,16 @@
     seenObjects.delete(obj);
     return obj;
   }
+  function replacedependencies(obj, str, seenObjects = new Set()) {
+    replaceDependenciesWithChildren(obj["devDependencies"], str, seenObjects);
+    obj["children"] = obj["devDependencies"];
+    return obj;
+  }
   const copy = JSON.parse(JSON.stringify(data));
   replaceDependenciesWithChildren(data, "dependencies");
-  replaceDependenciesWithChildren(copy, "devDependencies");
+  const newcopy = replacedependencies(copy, "dependencies");
   const container = document.getElementById("mountNode");
   const container2 = document.getElementById("mountNode2");
   draw(data, "dependencies", container, "mountNode");
-  draw(copy, "devDependencies", container2, "mountNode2");
+  draw(newcopy, "devDependencies", container2, "mountNode2");
 </script>
