@@ -18,15 +18,17 @@
   </body>
 </html>
 <script>
+  const data = <!-- REPLACE_WITH_JSON_DATA -->;
     function hideTooltip() {
-    const tooltip = document.getElementById("tooltip");
-    tooltip.style.display = "none";
-  }
+      const tooltip = document.getElementById("tooltip");
+      tooltip.style.display = "none";
+    };
+  console.log(data);
   function showTooltip(e, text) {
     const tooltip = document.getElementById("tooltip");
     tooltip.innerHTML = `
-      <h3>包名:${text.name}</h3>
-      <h3>版本:${text.version}</h3>`;
+          <h3>包名:${text.name}</h3>
+          <h3>版本:${text.version}</h3>`;
     tooltip.style.left = e.clientX + "px";
     tooltip.style.top = e.clientY + "px";
     tooltip.style.display = "block";
@@ -64,7 +66,6 @@
       },
       layout: {
         type: "mindmap",
-        children: childrenkey,
         direction: "H",
         getHeight: () => {
           return 16;
@@ -120,23 +121,31 @@
         graph.changeSize(container.scrollWidth, container.scrollHeight);
       };
   }
-  function replaceDependenciesWithChildren(obj, str) {
+  function replaceDependenciesWithChildren(obj, str, seenObjects = new Set()) {
+    if (seenObjects.has(obj)) {
+      // 处理循环引用情况
+      return;
+    }
+    seenObjects.add(obj);
     for (let key in obj) {
-      if (typeof obj[key] === "object") {
-        replaceDependenciesWithChildren(obj[key], str); // 递归处理嵌套属性
-        if (key === str) {
-          obj["children"] = obj[key];
-          delete obj[key];
+      if (obj.hasOwnProperty(key)) {
+        if (typeof obj[key] === "object" && obj[key] !== null) {
+          replaceDependenciesWithChildren(obj[key], str, seenObjects); // 递归处理嵌套属性
+          if (key === str) {
+            obj.children = obj[key];
+            delete obj[key];
+          }
         }
       }
     }
+    seenObjects.delete(obj);
+    return obj;
   }
-  const data = <!-- REPLACE_WITH_JSON_DATA -->;
-  const copy = {...data};
-  replaceDependenciesWithChildren(data,'dependencies');
-  replaceDependenciesWithChildren(copy,'devDependencies');
+  const copy = JSON.parse(JSON.stringify(data));
+  replaceDependenciesWithChildren(data, "dependencies");
+  replaceDependenciesWithChildren(copy, "devDependencies");
   const container = document.getElementById("mountNode");
-  const container2 = document.getElementById('mountNode2');
-   draw(data,'dependencies',container,'mountNode')
-   draw(copy,'devDependencies',container2,'mountNode2');
+  const container2 = document.getElementById("mountNode2");
+  draw(data, "dependencies", container, "mountNode");
+  draw(copy, "devDependencies", container2, "mountNode2");
 </script>
