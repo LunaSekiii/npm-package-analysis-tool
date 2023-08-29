@@ -13,14 +13,12 @@ suyou is an npm dependency visualization and analysis tool.
 To globally install suyou, run the following command:
 
 ```shell
-Copy
 npm install -g suyou
 ```
 
 Alternatively, you can use yarn:
 
 ```shell
-Copy
 yarn global add suyou
 ```
 
@@ -29,14 +27,12 @@ yarn global add suyou
 Use the following command to analyze dependencies:
 
 ```shell
-Copy
 npx suyou-cli analyze
 ```
 
 Or with yarn:
 
 ```shell
-Copy
 yarn suyou-cli analyze
 ```
 
@@ -47,7 +43,6 @@ You can use the following optional parameters to customize the analysis process:
 -   Depth of recursive analysis:
 
     ```shell
-    Copy
     -d=<n>`/`--depth=<n>
     ```
 
@@ -60,7 +55,6 @@ You can use the following optional parameters to customize the analysis process:
 -   Output JSON file:
 
     ```shell
-    Copy
     -j=[file-path]`/`--json=[file-path]
     ```
 
