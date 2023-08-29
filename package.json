@@ -3,7 +3,8 @@
 	"version": "1.1.0",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest",
+		"jest": "jest",
+		"test": "npx mocha --config mocha.config.js",
 		"dev": "nodemon --watch src/ -e ts --exec ts-node src/index.ts",
 		"analyze": "nodemon --watch src/ -e ts --exec ts-node src/index.ts analyze",
 		"build": "tsc && pkg -t node14-win-x64,node14-linux-x64,node14-macos-x64 dist/index.js -o dist/suyou-cli"
@@ -33,7 +34,11 @@
 		"jest": "^29.6.4",
 		"ts-jest": "^29.1.1",
 		"ts-node": "^10.9.1",
-		"typescript": "^5.1.6"
+		"chai": "^4.3.8",
+		"mocha": "^10.2.0",
+		"typescript": "^5.1.6",
+		"@types/chai": "^4.3.5",
+		"@types/mocha": "^10.0.1"
 	},
 	"dependencies": {
 		"commander": "^11.0.0",
