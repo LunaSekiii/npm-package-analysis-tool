@@ -1,5 +1,9 @@
 # 溯游
 
+![npm](https://img.shields.io/npm/v/suyou?label=npm%20version&logo=npm)
+![pullrequest](https://img.shields.io/github/issues-pr/LunaSekiii/npm-package-analysis-tool)
+![license](https://img.shields.io/npm/l/suyou)
+
 此文档还有[English](./README.md)版本
 
 <p align="center"> <img src="https://s2.loli.net/2023/08/29/Xcb4AKrTDE7gPfk.png" alt="icon" width="30%" /> </p>
@@ -54,27 +58,19 @@ yarn analyze
 
 -   向下递归分析的层次深度：
 
-    ```shell
-    -d=<n>`/`--depth=<n>
-    ```
+    `-d=<n>`/`--depth=<n>`
 
     示例：
 
-    ```shell
-    -d=3`/`--depth=3
-    ```
+    `-d=3`/`--depth=3`
 
 -   是否输出 JSON 文件：
 
-    ```shell
-    -j=[file-path]`/`--json=[file-path]
-    ```
+    `-j=[file-path]`/`--json=[file-path]`
 
     示例：
 
-    ```shell
-    -j=./analyze/package.json`/`--json=./analyze/package.json
-    ```
+    `-j=./analyze/package.json`/`--json=./analyze/package.json`
 
     注意：`[file-path]` 是可选的，默认为 `./analyze/package.json`。
 
