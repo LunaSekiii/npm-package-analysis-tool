@@ -1,36 +1,44 @@
 {
-  "name": "npm-package-analysis-tool",
-  "version": "1.0.0",
-  "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon --watch src/ -e ts --exec ts-node src/index.ts",
-    "analyze": "nodemon --watch src/ -e ts --exec ts-node src/index.ts analyze",
-    "test": "npx mocha --config mocha.config.js"
-  },
-  "keywords": [
-    "npm",
-    "package",
-    "analysis",
-    "tool"
-  ],
-  "author": "",
-  "license": "MIT",
-  "description": "npm package analysis tool",
-  "devDependencies": {
-    "@types/chai": "^4.3.5",
-    "@types/jest": "^29.5.4",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^20.5.2",
-    "@types/resolve": "^1.20.2",
-    "chai": "^4.3.8",
-    "eslint": "^8.47.0",
-    "mocha": "^10.2.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
-  },
-  "dependencies": {
-    "commander": "^11.0.0",
-    "resolve": "^1.22.4"
-  }
+	"name": "suyou",
+	"version": "1.1.0",
+	"main": "index.js",
+	"scripts": {
+		"test": "npx mocha --config mocha.config.js",
+		"dev": "nodemon --watch src/ -e ts --exec ts-node src/index.ts",
+		"analyze": "nodemon --watch src/ -e ts --exec ts-node src/index.ts analyze",
+		"build": "tsc && pkg -t node14-win-x64,node14-linux-x64,node14-macos-x64 dist/index.js -o dist/suyou-cli"
+	},
+	"bin": {
+		"suyou-cli": "dist/index.js",
+		"analyze": "dist/direct.js"
+	},
+	"keywords": [
+		"npm",
+		"package",
+		"analysis",
+		"tool"
+	],
+	"author": "",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/LunaSekiii/npm-package-analysis-tool"
+	},
+	"license": "MIT",
+	"description": "npm package analysis tool",
+	"devDependencies": {
+		"@types/jest": "^29.5.4",
+		"@types/node": "^20.5.2",
+		"@types/resolve": "^1.20.2",
+		"eslint": "^8.47.0",
+		"ts-node": "^10.9.1",
+		"chai": "^4.3.8",
+		"mocha": "^10.2.0",
+		"typescript": "^5.1.6",
+		"@types/chai": "^4.3.5",
+		"@types/mocha": "^10.0.1"
+	},
+	"dependencies": {
+		"commander": "^11.0.0",
+		"resolve": "^1.22.4"
+	}
 }
