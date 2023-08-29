@@ -20,7 +20,7 @@ interface AnalyzeOptions {
  * @param options
  */
 export default function analyze(options: AnalyzeOptions) {
-	console.log(options.depth, options.json);
+	// console.log(options.depth, options.json);
 	// 递归分析的层次深度
 	let depth = paramsProcess("depth", options.depth) || defaultAnalyzeDepth;
 	// 是否输出json文件
