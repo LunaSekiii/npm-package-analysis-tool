@@ -1,2 +1,75 @@
-# npm-package-analysis-tool
-npm package analysis tool
+# suyou
+
+This document is also available in [中文](./README.zh_CN.md).
+
+<p align="center"> <img src="https://s2.loli.net/2023/08/29/Xcb4AKrTDE7gPfk.png" alt="icon" width="30%" /> </p>
+
+suyou is an npm dependency visualization and analysis tool.
+
+## Getting Started
+
+### Installation
+
+To globally install suyou, run the following command:
+
+```shell
+Copy
+npm install -g suyou
+```
+
+Alternatively, you can use yarn:
+
+```shell
+Copy
+yarn global add suyou
+```
+
+### Analyzing Dependencies
+
+Use the following command to analyze dependencies:
+
+```shell
+Copy
+npx suyou-cli analyze
+```
+
+Or with yarn:
+
+```shell
+Copy
+yarn suyou-cli analyze
+```
+
+### Optional Parameters
+
+You can use the following optional parameters to customize the analysis process:
+
+-   Depth of recursive analysis:
+
+    ```shell
+    Copy
+    -d=<n>`/`--depth=<n>
+    ```
+
+    Example:
+
+    ```shell
+    -d=3`/`--depth=3
+    ```
+
+-   Output JSON file:
+
+    ```shell
+    Copy
+    -j=[file-path]`/`--json=[file-path]
+    ```
+
+    Example:
+
+    ```shell
+    -j=./analyze/package.json`/`--json=./analyze/package.json
+    ```
+
+    Note: `[file-path]` is optional and defaults to `./analyze/package.json`.
+
+Please follow the instructions above to install suyou and start using the dependency analysis tool. If you have any questions or need further assistance, feel free to ask.

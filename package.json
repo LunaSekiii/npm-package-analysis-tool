@@ -1,11 +1,16 @@
 {
-	"name": "npm-package-analysis-tool",
+	"name": "suyou",
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "nodemon --watch src/ -e ts --exec ts-node src/index.ts",
-		"analyze": "nodemon --watch src/ -e ts --exec ts-node src/index.ts analyze"
+		"analyze": "nodemon --watch src/ -e ts --exec ts-node src/index.ts analyze",
+		"build": "tsc && pkg -t node14-win-x64,node14-linux-x64,node14-macos-x64 dist/index.js -o dist/suyou-cli"
+	},
+	"bin": {
+		"suyou-cli": "dist/index.js",
+		"analyze": "dist/index.js"
 	},
 	"keywords": [
 		"npm",
@@ -14,6 +19,10 @@
 		"tool"
 	],
 	"author": "",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/LunaSekiii/npm-package-analysis-tool"
+	},
 	"license": "MIT",
 	"description": "npm package analysis tool",
 	"devDependencies": {
