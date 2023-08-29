@@ -2,7 +2,7 @@
 
 此文档还有[English](./README.md)版本
 
-<p align="center"> <img src="https://s2.loli.net/2023/08/29/Xcb4AKrTDE7gPfk.png " alt="icon" width="30%" /> </p>
+<p align="center"> <img src="https://s2.loli.net/2023/08/29/Xcb4AKrTDE7gPfk.png" alt="icon" width="30%" /> </p>
 
 溯游 (suyou) 是一个 npm 依赖可视化分析工具。
 
