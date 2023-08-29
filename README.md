@@ -36,6 +36,18 @@ Or with yarn:
 yarn suyou-cli analyze
 ```
 
+You can also use short commands:
+
+```shell
+npx analyze
+```
+
+Or with yarn:
+
+```shell
+yarn analyze
+```
+
 ### Optional Parameters
 
 You can use the following optional parameters to customize the analysis process:

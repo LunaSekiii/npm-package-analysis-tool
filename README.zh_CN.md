@@ -36,6 +36,18 @@ npx suyou-cli analyze
 yarn suyou-cli analyze
 ```
 
+你还能使用短命令:
+
+```shell
+npx analyze
+```
+
+或者使用 yarn：
+
+```shell
+yarn analyze
+```
+
 ### 可选参数
 
 你可以使用以下可选参数来自定义分析过程：
