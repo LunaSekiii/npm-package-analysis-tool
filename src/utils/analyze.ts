@@ -114,7 +114,7 @@ function getDependencies(
       )
     );
   }
-  /* for (let packageName in packageJson.devDependencies) {
+  /*   for (let packageName in packageJson.devDependencies) {
 		packageInfo.devDependencies?.push(
 			getDependencies(
 				residualDepth - 1,
