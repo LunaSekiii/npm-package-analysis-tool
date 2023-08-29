@@ -3,6 +3,7 @@ import path from "path";
 import resolve from "resolve";
 import server from "./server";
 import writeJsonFile from "./output";
+import paramsProcess from "./paramsProcess";
 // 当前工作目录
 const basedir = process.cwd();
 // 默认递归分析的层次深度
@@ -19,10 +20,11 @@ interface AnalyzeOptions {
  * @param options
  */
 export default function analyze(options: AnalyzeOptions) {
+	console.log(options.depth, options.json);
 	// 递归分析的层次深度
-	let depth = Number(options.depth) || defaultAnalyzeDepth;
+	let depth = paramsProcess("depth", options.depth) || defaultAnalyzeDepth;
 	// 是否输出json文件
-	let json = options.json;
+	let json = paramsProcess("json", options.json) as string | boolean;
 	// TODO: 参数合法性检测
 	if (json === true) json = defaultJsonFilePath;
 	console.log(
@@ -30,12 +32,12 @@ export default function analyze(options: AnalyzeOptions) {
 			json ? "输出到" + json : "不输出Json"
 		}\n-------------------------\n`
 	);
-	const projectDependencies = getRootDependencies(depth);
+	const projectDependencies = getRootDependencies(depth as number);
 	const str = JSON.stringify(projectDependencies, null, "\t");
 	if (json) {
 		writeJsonFile(json, str);
 	} else {
-		server(JSON.stringify(projectDependencies));
+		server(str);
 	}
 }
 
@@ -113,9 +115,6 @@ function getDependencies(
 				packageJson.dependencies[packageName]
 			)
 		);
-	}
-	if (packageName == "eslint") {
-		console.log(packageInfo.dependencies);
 	}
 	/* for (let packageName in packageJson.devDependencies) {
 		packageInfo.devDependencies?.push(
