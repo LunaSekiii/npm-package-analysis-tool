@@ -58,27 +58,19 @@ You can use the following optional parameters to customize the analysis process:
 
 -   Depth of recursive analysis:
 
-    ```shell
-    -d=<n>`/`--depth=<n>
-    ```
+    `-d=<n>`/`--depth=<n>`
 
     Example:
 
-    ```shell
-    -d=3`/`--depth=3
-    ```
+    `-d=3`/`--depth=3`
 
 -   Output JSON file:
 
-    ```shell
-    -j=[file-path]`/`--json=[file-path]
-    ```
+    `-j=[file-path]`/`--json=[file-path]`
 
     Example:
 
-    ```shell
-    -j=./analyze/package.json`/`--json=./analyze/package.json
-    ```
+    `-j=./analyze/package.json`/`--json=./analyze/package.json`
 
     Note: `[file-path]` is optional and defaults to `./analyze/package.json`.
 
