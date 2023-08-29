@@ -1,5 +1,9 @@
 # suyou
 
+![npm](https://img.shields.io/npm/v/suyou?label=npm%20version&logo=npm)
+![pullrequest](https://img.shields.io/github/issues-pr/LunaSekiii/npm-package-analysis-tool)
+![license](https://img.shields.io/npm/l/suyou)
+
 This document is also available in [中文](./README.zh_CN.md).
 
 <p align="center"> <img src="https://s2.loli.net/2023/08/29/Xcb4AKrTDE7gPfk.png" alt="icon" width="30%" /> </p>
