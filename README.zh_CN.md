@@ -13,14 +13,12 @@
 全局安装 suyou：
 
 ```shell
-Copy
 npm install -g suyou
 ```
 
 或者使用 yarn：
 
 ```shell
-Copy
 yarn global add suyou
 ```
 
@@ -29,14 +27,12 @@ yarn global add suyou
 使用以下命令进行依赖分析：
 
 ```shell
-Copy
 npx suyou-cli analyze
 ```
 
 或者使用 yarn：
 
 ```shell
-Copy
 yarn suyou-cli analyze
 ```
 
@@ -47,7 +43,6 @@ yarn suyou-cli analyze
 -   向下递归分析的层次深度：
 
     ```shell
-    Copy
     -d=<n>`/`--depth=<n>
     ```
 
@@ -60,7 +55,6 @@ yarn suyou-cli analyze
 -   是否输出 JSON 文件：
 
     ```shell
-    Copy
     -j=[file-path]`/`--json=[file-path]
     ```
 
