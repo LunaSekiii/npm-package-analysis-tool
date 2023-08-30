@@ -1,6 +1,6 @@
 {
 	"name": "suyou",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"main": "index.js",
 	"scripts": {
 		"jest": "jest",
@@ -17,15 +17,22 @@
 		"npm",
 		"package",
 		"analysis",
-		"tool"
+		"analyze",
+		"dependency analysis",
+		"visualization",
+		"tool",
+		"CLI"
 	],
-	"author": "",
+	"author": [
+		"LunaSeki",
+		"Zzhgitup"
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/LunaSekiii/npm-package-analysis-tool"
 	},
 	"license": "MIT",
-	"description": "npm package analysis tool",
+	"description": "Suyou is a powerful npm project dependency analysis and visualization tool.It helps developers gain insights into project dependencies, providing intuitive visualizations and valuable statistics. By analyzing the dependency tree of a project, you can easily identify potential issues, circular dependencies, and outdated dependencies.",
 	"devDependencies": {
 		"@types/jest": "^29.5.4",
 		"@types/node": "^20.5.2",

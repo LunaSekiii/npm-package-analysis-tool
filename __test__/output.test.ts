@@ -17,7 +17,6 @@ describe("writeJsonFile", () => {
 
 		// 读取文件内容并验证是否与写入的数据一致
 		const fileContent = fs.readFileSync(filePath, "utf-8");
-		console.log(fileContent);
 		expect(fileContent).toBe(data);
 
 		// 验证 console.log 是否被调用

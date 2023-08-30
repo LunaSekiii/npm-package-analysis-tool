@@ -132,9 +132,18 @@ function getDependencies(
  * 获取根项目的依赖
  */
 function getRootDependencies(depth: number) {
-	const { name, version, dependencies, devDependencies } = JSON.parse(
-		fs.readFileSync("./package.json", "utf-8")
-	);
+	let rootPackageJson;
+	try {
+		rootPackageJson = JSON.parse(
+			fs.readFileSync("./package.json", "utf-8")
+		);
+	} catch (e) {
+		console.error(
+			new Error("当前目录下不存在package.json文件,请在项目根目录下执行")
+		);
+		process.exit(1);
+	}
+	const { name, version, dependencies, devDependencies } = rootPackageJson;
 	let packageInfo: PackageInfo = {
 		name: name || "root",
 		version: version,
