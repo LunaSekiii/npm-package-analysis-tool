@@ -37,7 +37,7 @@ npx suyou-cli analyze
 或者使用 yarn：
 
 ```shell
-yarn suyou-cli analyze
+suyou-cli analyze
 ```
 
 你还能使用短命令:
@@ -49,7 +49,7 @@ npx analyze
 或者使用 yarn：
 
 ```shell
-yarn analyze
+analyze
 ```
 
 ### 可选参数
